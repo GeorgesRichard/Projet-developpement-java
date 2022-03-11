@@ -5,7 +5,7 @@ import java.awt.* ;
 
 public class Panel_jeu extends JPanel {
 
-    public Panel_jeu() {
+    public Panel_jeu(){
         super() ; 
         this.setPreferredSize(new Dimension(500 , 500)) ; 
         this.setBackground(Color.green) ; 

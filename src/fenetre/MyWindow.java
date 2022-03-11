@@ -1,5 +1,7 @@
 package fenetre; 
-import javax.swing.* ; 
+import javax.swing.* ;
+import javax.swing.border.Border;
+
 import java.awt.* ; 
 
 public class MyWindow  extends JFrame  {
@@ -11,10 +13,14 @@ public class MyWindow  extends JFrame  {
         this.setVisible(true);
         this.setLocationRelativeTo(null) ; 
         JPanel content= (JPanel) this.getContentPane();  
-        content.setLayout(new FlowLayout()) ; 
-        content.add(new Panel_jeu()) ; 
-        content.add(new Panel_controle()) ; 
+        JPanel Image_controle = new Panel_controle() ;
+        JPanel Game_vue =  new Panel_jeu()  ;
+        content.setLayout(new BorderLayout()); 
+        content.add(Image_controle  , BorderLayout.WEST) ; 
+        content.add(Game_vue , BorderLayout.CENTER) ; 
 
+
+        
     }  
     public static void main ( String args[]){
         MyWindow window = new MyWindow() ; 

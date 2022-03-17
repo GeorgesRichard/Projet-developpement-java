@@ -10,14 +10,13 @@ public class Panel_controle extends JPanel {
 
     public Panel_controle() {
         super() ; 
-        this.setPreferredSize(new Dimension(400 , 600)) ; 
-        this.setBackground(Color.gray); 
+        this.setPreferredSize(new Dimension(300 , 600)) ; 
         this.setLayout(new BorderLayout());
         
         
         JPanel control = new JPanel() ; 
-        control.setPreferredSize(new Dimension(400 ,400));
-        control.setLayout(new GridLayout(8,1 , 10 , 10));
+        control.setPreferredSize(new Dimension(200 ,200));
+        control.setLayout(new GridLayout(3,1 , 10 , 10));
         this.add(control , BorderLayout.NORTH) ; 
         
         JButton b1 = new Button_play() ;

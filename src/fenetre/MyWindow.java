@@ -23,9 +23,7 @@ public class MyWindow  extends JFrame  {
         
     }  
     public static void main ( String args[]){
-        MyWindow window = new MyWindow() ; 
-
-
+        MyWindow window = new MyWindow() ;
 
 
     }  

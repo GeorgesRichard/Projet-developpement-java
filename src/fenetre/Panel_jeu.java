@@ -10,9 +10,5 @@ public class Panel_jeu extends JPanel {
         this.setPreferredSize(new Dimension(500 , 500)) ; 
         this.setBackground(Color.gray) ; 
     }
-    /*@Override 
-    public void paintComponent( Graphics g){
-
-    }*/
 
 }

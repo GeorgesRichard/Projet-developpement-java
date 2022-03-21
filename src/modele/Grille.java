@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import java.io.Serializable;
 
-public class Grille extends AbstractModeleEcoutable //implements Serializable
+public class Grille extends AbstractModeleEcoutable implements Serializable
 {
 
   protected int nbCol, nbRow ;

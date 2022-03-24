@@ -5,11 +5,13 @@ import java.util.ArrayList;
 
 import java.io.Serializable;
 
+
 public class Grille extends AbstractModeleEcoutable implements Serializable
+
 {
 
-  protected int nbCol, nbRow ;
-  protected int[][] puzzle ;
+  public int nbCol, nbRow ;
+  public int[][] puzzle ;
 
   //constructeur
   public Grille(int nbCol, int nbRow, int[][] puzzle){
@@ -30,7 +32,12 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
   public int[][] getPuzzle(){
     return this.puzzle;
   }
-
+  public int getNbCol(){
+    return this.nbCol;
+  }
+  public int getNbRow(){
+    return this.nbRow;
+  }
 
   //methodes ...
   public void creation(){
@@ -44,84 +51,94 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
     this.puzzle[this.nbRow-1][this.nbCol-1] = 0;
   }
 
-  public ArrayList<Grille> possibleMoves(int[][] puzzle){
-    System.out.println("On peut deplacer les cases : ");
+  public boolean isOver(){
+    int[][] result = new int [this.nbRow][this.nbCol];
+    int x = 1;
+    for(int i=0; i<this.nbRow; i++){
+      for(int j=0; j<this.nbCol; j++){
+        result[i][j] = x;
+        x++;
+      }
+    }
+    return result==this.puzzle;
+  }
 
-    ArrayList<Grille> l = new ArrayList<Grille>();
+  public ArrayList<Direction> possibleMoves(int[][] puzzle){
+    //System.out.println("Les mouvements possibles : ");
 
-    int[][] puzzle1 = puzzle.clone();
-    int[][] puzzle2 = puzzle.clone();
-    int[][] puzzle3 = puzzle.clone();
-    int[][] puzzle4 = puzzle.clone();
+    ArrayList<Direction> l = new ArrayList<Direction>();
 
     for(int i = 0; i < this.nbRow; i++){
       for(int j = 0; j < this.nbCol; j++){
         if(puzzle[i][j] == 0){
           if(i > 0){
-            //int[][] puzzle1 = puzzle;
-            //System.out.print(puzzle1[i-1][j] + " ");
-            System.out.println("Ancien :");
-            new Grille(this.nbRow, this.nbCol, puzzle).show();
-            puzzle1[i][j] = puzzle1[i-1][j];
-            puzzle1[i-1][j] = 0;
-            Grille m1 = new Grille(this.nbRow, this.nbCol, puzzle1);
-            l.add(m1);
-            System.out.println("New :");
-            m1.show();
+            l.add(Direction.UP);
+            //System.out.print("UP ");
           }
           if(j > 0){
-            //int[][] puzzle2 = puzzle;
-            //System.out.print(puzzle2[i][j-1] + " ");
-            System.out.println("Ancien :");
-            new Grille(this.nbRow, this.nbCol, puzzle).show();
-            puzzle2[i][j] = puzzle2[i][j-1];
-            puzzle2[i][j-1] = 0;
-            Grille m2 = new Grille(this.nbRow, this.nbCol, puzzle2);
-            l.add(m2);
-            System.out.println("New : ");
-            m2.show();
+            l.add(Direction.LEFT);
+          //  System.out.print("LEFT ");
           }
           if(i < this.nbRow -1){
-            //int[][] puzzle3 = puzzle;
-            //System.out.print(puzzle3[i+1][j] + " ");
-            System.out.println("Ancien :");
-            new Grille(this.nbRow, this.nbCol, puzzle).show();
-            puzzle3[i][j] = puzzle3[i+1][j];
-            puzzle3[i+1][j] = 0;
-            Grille m3 = new Grille(this.nbRow, this.nbCol, puzzle3);
-            l.add(m3);
-            System.out.println("New : ");
-            m3.show();
+            l.add(Direction.DOWN);
+          //  System.out.print("DOWN ");
           }
-          if(j < this.nbCol-1){
-            //int[][] puzzle4 = puzzle;
-            //System.out.print(puzzle4[i][j+1] + " ");
-            System.out.println("Ancien :");
-            new Grille(this.nbRow, this.nbCol, puzzle).show();
-            puzzle4[i][j] = puzzle4[i][j+1];
-            puzzle4[i][j+1] = 0;
-            Grille m4 = new Grille(this.nbRow, this.nbCol, puzzle4);
-            l.add(m4);
-            System.out.println("New :");
-            m4.show();
+          if(j < this.nbCol - 1){
+            l.add(Direction.RIGHT);
+          //  System.out.print("RIGHT ");
           }
         }
       }
     }
-    System.out.println(" ");
+    //System.out.println("");
     return l;
   }
 
 
+  public void swap(int x1, int y1, int x2, int y2){
+    int tmp = this.puzzle[x1][y1];
+    this.puzzle[x1][y1] = this.puzzle[x2][y2];;
+    this.puzzle[x2][y2] = tmp;
+  }
+
+  public Direction play(Direction direction){
+    for(int i = 0; i < this.nbRow; i++){
+      for(int j = 0; j < this.nbCol; j++){
+        if(this.puzzle[i][j] == 0){
+          if(direction==Direction.UP && i > 0){
+            swap(i, j, i-1, j);
+            System.out.println("(" + i + "," + j + ") --> " + "(" + (i-1) + "," + j + ")" );fireChangement();
+            return Direction.UP;
+          }
+          else if(direction==Direction.DOWN && i < this.nbRow-1){
+            swap(i, j, i+1, j);
+            System.out.println("(" + i + "," + j + ") --> " + "(" + (i+1) + "," + j + ")" );fireChangement();
+            return Direction.DOWN;
+          }
+          else if(direction==Direction.LEFT && j > 0){
+            swap(i, j, i, j-1);
+            System.out.println("(" + i + "," + j + ") --> " + "(" + i + "," + (j-1) +")" );fireChangement();
+            return Direction.LEFT;
+          }
+          else if(direction==Direction.RIGHT && j < this.nbRow-1){
+            swap(i, j, i, j+1);
+            System.out.println("(" + i + "," + j + ") --> " + "(" + i + "," + (j+1) + ")" );fireChangement();
+            return Direction.RIGHT;
+          }
+        }
+      }
+    }
+    return NONE;
+  }
 
   public void show(){
     String result = "";
     for(int i = 0; i < this.nbRow; i++){
       for(int j = 0; j < this.nbCol; j++){
         if(this.puzzle[i][j] == 0)
-          System.out.print("  ");
+          System.out.print(" trou ");
         else
-          System.out.print(this.puzzle[i][j]+ " ");
+          System.out.print("(" + i + "," + j + ")" +this.puzzle[i][j]+ " ");
       }
       System.out.println("");
     }

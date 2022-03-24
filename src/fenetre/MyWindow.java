@@ -17,7 +17,7 @@ public class MyWindow  extends JFrame  {
         JPanel content= (JPanel) this.getContentPane();  
         
         JPanel Game_vue =  new Panel_jeu()  ;
-        JPanel Image_controle = new Panel_controle(Game_vue) ;
+        JToolBar Image_controle = new Panel_controle(Game_vue , MyWindow.this) ;
         
         this.addWindowListener(new WindowAdapter() {
                 @Override
@@ -28,7 +28,7 @@ public class MyWindow  extends JFrame  {
         ); 
 
         content.setLayout(new BorderLayout()); 
-        content.add(Image_controle  , BorderLayout.WEST) ; 
+        content.add(Image_controle  , BorderLayout.NORTH) ; 
         content.add(Game_vue , BorderLayout.CENTER) ; 
     }
     

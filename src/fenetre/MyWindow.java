@@ -1,4 +1,5 @@
-package fenetre; 
+package fenetre;
+import modele.*; 
 import javax.swing.* ;
 
 import java.awt.*  ;
@@ -15,8 +16,13 @@ public class MyWindow  extends JFrame  {
         this.setLocationRelativeTo(null) ; 
 
         JPanel content= (JPanel) this.getContentPane();  
-        
-        JPanel Game_vue =  new Panel_jeu()  ;
+        Grille game = new Grille ( 5 , 5 ) ; 
+        game.creation();
+        game.show();
+
+        Panel_jeu Game_vue =  new Panel_jeu(game)  ;
+        game.ajoutEcouteur(Game_vue);
+
         JToolBar Image_controle = new Panel_controle(Game_vue , MyWindow.this) ;
         
         this.addWindowListener(new WindowAdapter() {

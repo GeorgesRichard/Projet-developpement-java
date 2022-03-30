@@ -1,10 +1,8 @@
 package modele;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 import java.io.Serializable;
-
 
 public class Grille extends AbstractModeleEcoutable implements Serializable
 
@@ -14,18 +12,18 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
   public int[][] puzzle ;
 
   //constructeur
-  public Grille(int nbCol, int nbRow, int[][] puzzle){
+  public Grille(int nbRow, int nbCol, int[][] puzzle){
     super();
     this.nbCol = nbCol;
     this.nbRow = nbRow;
     this.puzzle = puzzle;
   }
 
-  public Grille(int nbCol, int nbRow){
+  public Grille(int nbRow, int nbCol){
     super();
     this.nbCol = nbCol;
     this.nbRow = nbRow;
-    this.puzzle = new int[nbRow][nbCol];
+    this.puzzle = creation();
   }
 
   //getters & setters
@@ -40,27 +38,34 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
   }
 
   //methodes ...
-  public void creation(){
+  public int[][] creation(){
     int x = 1;
+    int[][] puzzle = new int [this.nbRow][this.nbCol];
     for(int i = 0; i < this.nbRow; i++){
       for(int j = 0; j < this.nbCol; j++){
-        this.puzzle[i][j] = x;
+        puzzle[i][j] = x;
         x++;
       }
     }
-    this.puzzle[this.nbRow-1][this.nbCol-1] = 0;
+    puzzle[this.nbRow-1][this.nbCol-1] = 0;
+    return puzzle;
+  }
+
+  public boolean isEmpty(int x, int y){
+    if(this.puzzle[x][y]==0)
+      return true;
+    return false;
   }
 
   public boolean isOver(){
-    int[][] result = new int [this.nbRow][this.nbCol];
-    int x = 1;
+    int[][] result = creation();
     for(int i=0; i<this.nbRow; i++){
       for(int j=0; j<this.nbCol; j++){
-        result[i][j] = x;
-        x++;
+        if(result[i][j] != this.puzzle[i][j])
+          return false;
       }
     }
-    return result==this.puzzle;
+    return true;
   }
 
   public ArrayList<Direction> possibleMoves(int[][] puzzle){
@@ -73,19 +78,19 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
         if(puzzle[i][j] == 0){
           if(i > 0){
             l.add(Direction.UP);
-            //System.out.print("UP ");
+            System.out.print("UP ");
           }
           if(j > 0){
             l.add(Direction.LEFT);
-          //  System.out.print("LEFT ");
+            System.out.print("LEFT ");
           }
           if(i < this.nbRow -1){
             l.add(Direction.DOWN);
-          //  System.out.print("DOWN ");
+            System.out.print("DOWN ");
           }
           if(j < this.nbCol - 1){
             l.add(Direction.RIGHT);
-          //  System.out.print("RIGHT ");
+            System.out.print("RIGHT ");
           }
         }
       }
@@ -101,34 +106,85 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
     this.puzzle[x2][y2] = tmp;
   }
 
-  public Direction play(Direction direction){
+  public Direction move(Direction direction){
     for(int i = 0; i < this.nbRow; i++){
       for(int j = 0; j < this.nbCol; j++){
         if(this.puzzle[i][j] == 0){
           if(direction==Direction.UP && i > 0){
             swap(i, j, i-1, j);
-            System.out.println("(" + i + "," + j + ") --> " + "(" + (i-1) + "," + j + ")" );fireChangement();
+            System.out.println("(" + i + "," + j + ") --> " + "(" + (i-1) + "," + j + ")" );
+            fireChangement();
             return Direction.UP;
           }
           else if(direction==Direction.DOWN && i < this.nbRow-1){
             swap(i, j, i+1, j);
-            System.out.println("(" + i + "," + j + ") --> " + "(" + (i+1) + "," + j + ")" );fireChangement();
+            System.out.println("(" + i + "," + j + ") --> " + "(" + (i+1) + "," + j + ")" );
+            fireChangement();
             return Direction.DOWN;
           }
           else if(direction==Direction.LEFT && j > 0){
             swap(i, j, i, j-1);
-            System.out.println("(" + i + "," + j + ") --> " + "(" + i + "," + (j-1) +")" );fireChangement();
+            System.out.println("(" + i + "," + j + ") --> " + "(" + i + "," + (j-1) +")" );
+            fireChangement();
             return Direction.LEFT;
           }
           else if(direction==Direction.RIGHT && j < this.nbRow-1){
             swap(i, j, i, j+1);
-            System.out.println("(" + i + "," + j + ") --> " + "(" + i + "," + (j+1) + ")" );fireChangement();
+            System.out.println("(" + i + "," + j + ") --> " + "(" + i + "," + (j+1) + ")" );
+            fireChangement();
             return Direction.RIGHT;
           }
         }
       }
     }
-    return NONE;
+    return Direction.NONE;
+  }
+
+  public ArrayList<Direction> playAlea(int alea){
+
+    System.out.println("On mélange le puzzle en " + alea + " permutations.");
+
+    ArrayList<Direction> historique = new ArrayList<Direction>();
+    Random random = new Random();
+    int nb;
+
+    while(alea>0){
+      System.out.println("");
+      ArrayList<Direction> a = possibleMoves(this.puzzle);
+      nb = random.nextInt(a.size());
+      historique.add(a.get(nb));
+      move(a.get(nb));
+      //grille.show();
+      System.out.println("Le mouvement réalisé : " + a.get(nb));
+      alea--;
+    }
+
+    return historique;
+  }
+
+  public void play(String choice){
+    ArrayList<Direction> a = possibleMoves(this.puzzle);
+    Direction d = Direction.NONE;
+    if(choice.equals("Up"))
+      d = Direction.UP;
+    else if(choice.equals("Down"))
+      d = Direction.DOWN;
+    else if(choice.equals("Right"))
+      d = Direction.RIGHT;
+    else if(choice.equals("Left"))
+      d = Direction.LEFT;
+    int c = 0;
+    for(int i=0; i<a.size(); i++){
+      if(a.get(i)==d){
+        move(d);
+        show();
+      }
+      else
+        c++;
+    }
+    if(c==a.size())
+      System.out.println("Mouvement impossible. Essayez un autre !!");
+
   }
 
   public void show(){
@@ -136,12 +192,13 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
     for(int i = 0; i < this.nbRow; i++){
       for(int j = 0; j < this.nbCol; j++){
         if(this.puzzle[i][j] == 0)
-          System.out.print(" trou ");
+          System.out.print("  ");
         else
-          System.out.print("(" + i + "," + j + ")" +this.puzzle[i][j]+ " ");
+          System.out.print(this.puzzle[i][j] + " ");
       }
       System.out.println("");
     }
   }
+
 
 }

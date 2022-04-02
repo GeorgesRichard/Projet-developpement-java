@@ -1,3 +1,5 @@
 
-javac -d ../build modele/*.java
-javac -d ../build view/*.java
+javac -d ../dist modele/*.java
+javac -d ../dist fenetre/*.java
+
+java -cp ../dist fenetre.MyWindow

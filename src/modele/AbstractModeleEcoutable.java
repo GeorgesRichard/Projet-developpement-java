@@ -23,7 +23,7 @@ public abstract class AbstractModeleEcoutable implements ModeleEcoutable {
 
   public void fireChangement(){
     for(EcouteurModele e : this.ecouteurs)
-      e.modeleMisAJour(this);
+      e.modeleMisAJour();
   }
 
 }

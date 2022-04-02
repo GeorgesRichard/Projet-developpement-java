@@ -67,12 +67,45 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
     }
     return true;
   }
-
+  public void swap(int x1, int y1, int x2, int y2){
+    int tmp = this.puzzle[x1][y1];
+    this.puzzle[x1][y1] = this.puzzle[x2][y2];;
+    this.puzzle[x2][y2] = tmp;
+  }
+  /** 
+   * fonction qui determine si la case (posX , posY) peut bouger dans la direction "direction"
+   * @param posX represente le numero de ligne de la case 
+   * @param posY represente le numero de colonne de la case 
+   * @param direction represente la direction dans la quelle on souhaite bouger notre la case 
+   * @return un boolean qui dit si on peut bouger ou pas 
+  */
+      
+  public boolean canMove (int posX , int posY , Direction direction){
+        if ( direction == Direction.LEFT){
+            if (posY - 1 < 0 ){
+              return false ; 
+            }
+        }
+        else if ( direction == Direction.RIGHT){
+            if ( posY + 1 >= this.nbCol){
+              return false ; 
+            }
+        }
+        else if ( direction == Direction.UP){
+            if ( posX - 1 < 0 ){
+              return false ; 
+            }
+        }
+        else {
+            if ( posX + 1 >= this.nbRow){
+              return false ; 
+            }
+        }
+        return true ; 
+  }
   public ArrayList<Direction> possibleMoves(int[][] puzzle){
     //System.out.println("Les mouvements possibles : ");
-
     ArrayList<Direction> l = new ArrayList<Direction>();
-
     for(int i = 0; i < this.nbRow; i++){
       for(int j = 0; j < this.nbCol; j++){
         if(puzzle[i][j] == 0){
@@ -97,13 +130,6 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
     }
     //System.out.println("");
     return l;
-  }
-
-
-  public void swap(int x1, int y1, int x2, int y2){
-    int tmp = this.puzzle[x1][y1];
-    this.puzzle[x1][y1] = this.puzzle[x2][y2];;
-    this.puzzle[x2][y2] = tmp;
   }
 
   public Direction move(Direction direction){
@@ -140,14 +166,12 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
     return Direction.NONE;
   }
 
-  public ArrayList<Direction> playAlea(int alea){
+  public void playAlea(int alea){
 
     System.out.println("On mélange le puzzle en " + alea + " permutations.");
-
     ArrayList<Direction> historique = new ArrayList<Direction>();
     Random random = new Random();
     int nb;
-
     while(alea>0){
       System.out.println("");
       ArrayList<Direction> a = possibleMoves(this.puzzle);
@@ -158,8 +182,6 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
       System.out.println("Le mouvement réalisé : " + a.get(nb));
       alea--;
     }
-
-    return historique;
   }
 
   public void play(String choice){
@@ -184,7 +206,30 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
     }
     if(c==a.size())
       System.out.println("Mouvement impossible. Essayez un autre !!");
-
+  }
+  /**
+   * Methode de gestion des deplacements dans une interfaces graphiques. 
+   * Elle permet de bouger la case (posX , posY) dans la direction 'direction'.
+   * Elle ne retourne pas d'objet , elle se contente de modifier la grille 
+   * @param posX represente le numero de ligne de la case 
+   * @param posY represente le numero de colonne de la case 
+   * @param direction represente la direction dans la quelle on souhaite bouger notre la case
+   */
+  public void play (int posX , int posY , Direction direction){
+    if (canMove(posX, posY, direction)){
+        if (direction == Direction.LEFT){
+            swap(posX, posY, posX, posY - 1);
+        }
+        else if ( direction == Direction.RIGHT ){
+            swap(posX, posY, posX, posY + 1);
+        }
+        else if ( direction == Direction.UP){
+            swap(posX, posY, posX -1 , posY );
+        }
+        else {
+            swap(posX, posY, posX + 1 , posY );
+        }
+    }
   }
 
   public void show(){
@@ -199,6 +244,4 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
       System.out.println("");
     }
   }
-
-
 }

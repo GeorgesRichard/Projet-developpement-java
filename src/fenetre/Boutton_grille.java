@@ -15,6 +15,7 @@ public class Boutton_grille extends JButton {
     public int posX ; 
     public int posY ; 
     public Panel_jeu panel ;
+    public int numero;
     /**
      * 
      * @param numero Le numero de la case correspondante 
@@ -29,13 +30,63 @@ public class Boutton_grille extends JButton {
         this.posX = posX ; 
         this.posY = posY ; 
         this.panel = panel ;
-
+		this.numero= numero;
         if ( numero == 0){
             this.setText("");
             this.setBackground(Color.GRAY);
         }  
+        this.addActionListener((event) -> cliqued()) ;
+        this.addKeyListener ( new KeyAdapter(){
+			@Override 
+			public void keyPressed(KeyEvent e){
+				if(panel.cliqued){
+					
+					if(e.getKeyCode()==KeyEvent.VK_RIGHT){
+						panel.grille.play(panel.boutton_cliqued.posX,panel.boutton_cliqued.posY,Direction.RIGHT);
+						}
+						
+					else if(e.getKeyCode()==KeyEvent.VK_LEFT){
+						panel.grille.play(panel.boutton_cliqued.posX,panel.boutton_cliqued.posY,Direction.LEFT);
+						}
+						
+					else if(e.getKeyCode()==KeyEvent.VK_UP){
+						panel.grille.play(panel.boutton_cliqued.posX,panel.boutton_cliqued.posY,Direction.UP);
+						}
+					else if(e.getKeyCode()==KeyEvent.VK_DOWN){
+						panel.grille.play(panel.boutton_cliqued.posX,panel.boutton_cliqued.posY,Direction.DOWN);
+						
+						}
+					panel.grille.fireChangement();
+					
+					}
+				
+				}
+			
+			
+			});
     
-    }      
+    }  
+    public void cliqued(){
+		
+		if(this.numero!=0)
+		{
+			if(panel.cliqued){
+				panel.boutton_cliqued.setBorderPainted(false);
+				this.setBorder(new LineBorder(Color.BLACK, 5));
+				panel.boutton_cliqued = this;
+				panel.boutton_cliqued.setBorderPainted(true);
+			
+		}
+		else {
+			this.setBorder(new LineBorder(Color.BLACK, 5));
+			panel.boutton_cliqued = this;
+			panel.cliqued = true;
+			
+			}
+		
+		}  
+		
+		 } 
 
 
 

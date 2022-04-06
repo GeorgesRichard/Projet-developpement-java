@@ -2,6 +2,9 @@ package modele;
 
 import java.util.*;
 
+/**
+ * Classe exécutable qui permet de jouer dans le terminal
+ */
 public class Demo {
 
   public static void main(String [] args){

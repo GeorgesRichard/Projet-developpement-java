@@ -2,24 +2,39 @@ package modele;
 
 import java.util.*;
 
-import java.io.Serializable;
+/**
+ * Classe qui se charge du modèle (creation du puzzle, déplacement des cases, ...)
+ */
 
-public class Grille extends AbstractModeleEcoutable implements Serializable
-
+public class Grille extends AbstractModeleEcoutable
 {
+
+  //Attributs
 
   public int nbCol, nbRow ;
   public int[][] puzzle ;
 
-  //constructeur
-  public Grille(int nbRow, int nbCol, int[][] puzzle){
+  //constructeurs
+
+  /**
+   * Présentation de la Grille
+   * @param nbRow : un entier qui représente le nombre de ligne
+   * @param nbCol : un entier qui représente le nombre de colonne
+   * @param puzzle : matrice d'entier qui représente la grille ou le puzzle
+   */
+  public Grille ( int nbRow, int nbCol, int[][] puzzle ) {
     super();
     this.nbCol = nbCol;
     this.nbRow = nbRow;
     this.puzzle = puzzle;
   }
 
-  public Grille(int nbRow, int nbCol){
+  /**
+   * Présentation de la grille en présentant seulement le nombre de ligne et de colonne avec génération automatique de la Grille
+   * @param nbRow : un entier qui représente le nombre de ligne
+   * @param nbCol : un entier qui représente le nombre de colonne
+   */
+  public Grille ( int nbRow, int nbCol ) {
     super();
     this.nbCol = nbCol;
     this.nbRow = nbRow;
@@ -27,18 +42,33 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
   }
 
   //getters & setters
-  public int[][] getPuzzle(){
+
+  /**
+   * @return la matrice d'entier le puzzle
+   */
+  public int[][] getPuzzle () {
     return this.puzzle;
   }
-  public int getNbCol(){
+  /**
+   * @return le nombre de colonne
+   */
+  public int getNbCol () {
     return this.nbCol;
   }
-  public int getNbRow(){
+  /**
+   * @return le nombre de ligne
+   */
+  public int getNbRow () {
     return this.nbRow;
   }
 
   //methodes ...
-  public int[][] creation(){
+
+  /**
+   * Creation d'une matrice d'entier qui représente le puzzle
+   * @return le puzzle
+   */
+  public int[][] creation () {
     int x = 1;
     int[][] puzzle = new int [this.nbRow][this.nbCol];
     for(int i = 0; i < this.nbRow; i++){
@@ -51,13 +81,23 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
     return puzzle;
   }
 
-  public boolean isEmpty(int x, int y){
+  /*
+   * Vérifier si une case est un trou ou pas
+   * @param x : entier représentant l'abscice de la case
+   * @param y : entier représentant l'ordonnées de la case
+   * @return true si puzzle[i][j] est un trou sinon false
+   */
+  public boolean isEmpty ( int x, int y ) {
     if(this.puzzle[x][y]==0)
       return true;
     return false;
   }
 
-  public boolean isOver(){
+  /**
+   * Vérifie si la partie est terminé
+   * @return true si le puzzle est résolu sinon false
+   */
+  public boolean isOver () {
     int[][] result = creation();
     for(int i=0; i<this.nbRow; i++){
       for(int j=0; j<this.nbCol; j++){
@@ -67,43 +107,58 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
     }
     return true;
   }
-  public void swap(int x1, int y1, int x2, int y2){
+
+  /**
+   * Permuter deux cases (  ou entiers ) du puzzle
+   * @param x1 : entier qui représente l'abscice de la première case
+   * @param y1 : entier qui représente l'ordonnée de la première case
+   * @param x2 : entier qui représente l'abscice de la deuxième case
+   * @param y2 : entier qui représente l'ordonnée de la deuxième case
+   */
+  public void swap ( int x1, int y1, int x2, int y2 ) {
     int tmp = this.puzzle[x1][y1];
     this.puzzle[x1][y1] = this.puzzle[x2][y2];;
     this.puzzle[x2][y2] = tmp;
   }
-  /** 
+
+  /**
    * fonction qui determine si la case (posX , posY) peut bouger dans la direction "direction"
-   * @param posX represente le numero de ligne de la case 
-   * @param posY represente le numero de colonne de la case 
-   * @param direction represente la direction dans la quelle on souhaite bouger notre la case 
-   * @return un boolean qui dit si on peut bouger ou pas 
+   * @param posX represente le numero de ligne de la case
+   * @param posY represente le numero de colonne de la case
+   * @param direction represente la direction dans la quelle on souhaite bouger notre la case
+   * @return un boolean qui dit si on peut bouger ou pas
   */
-      
+
   public boolean canMove (int posX , int posY , Direction direction){
         if ( direction == Direction.LEFT){
             if (posY - 1 < 0 ){
-              return false ; 
+              return false ;
             }
         }
         else if ( direction == Direction.RIGHT){
             if ( posY + 1 >= this.nbCol){
-              return false ; 
+              return false ;
             }
         }
         else if ( direction == Direction.UP){
             if ( posX - 1 < 0 ){
-              return false ; 
+              return false ;
             }
         }
         else {
             if ( posX + 1 >= this.nbRow){
-              return false ; 
+              return false ;
             }
         }
-        return true ; 
+        return true ;
   }
-  public ArrayList<Direction> possibleMoves(int[][] puzzle){
+
+  /**
+   * Déterminer les mouvements possibles qu'on peut réaliser dans un puzzle
+   * @param puzzle : matrice d'entier qui représente le puzzle
+   * @return une liste qui contient les directions vers lesquelles le trou peut se déplacer
+   */
+  public ArrayList<Direction> possibleMoves ( int[][] puzzle ) {
     //System.out.println("Les mouvements possibles : ");
     ArrayList<Direction> l = new ArrayList<Direction>();
     for(int i = 0; i < this.nbRow; i++){
@@ -132,6 +187,11 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
     return l;
   }
 
+  /**
+   * Déplacer le trou suivant une direction
+   * @param direction : Direction qui représente soit le haut soit le bas soit à gauche soit à droite
+   * @return la direction après que le trou s'est déplacé
+   */
   public Direction move(Direction direction){
     for(int i = 0; i < this.nbRow; i++){
       for(int j = 0; j < this.nbCol; j++){
@@ -166,6 +226,10 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
     return Direction.NONE;
   }
 
+  /**
+   * Faire des mouvements de directions aléatoires en déplaçant le trou alea fois
+   * @param alea : entier qui représente le nombre de mouvements effectuées
+   */
   public void playAlea(int alea){
 
     System.out.println("On mélange le puzzle en " + alea + " permutations.");
@@ -184,6 +248,10 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
     }
   }
 
+  /**
+   * Appliquer le mouvement selon choice ( dans le terminal )
+   * @param choice : chaine de caractère qui désigne le sens vers lequel le trou va se déplacer
+   */
   public void play(String choice){
     ArrayList<Direction> a = possibleMoves(this.puzzle);
     Direction d = Direction.NONE;
@@ -208,11 +276,11 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
       System.out.println("Mouvement impossible. Essayez un autre !!");
   }
   /**
-   * Methode de gestion des deplacements dans une interfaces graphiques. 
+   * Methode de gestion des deplacements dans une interfaces graphiques.
    * Elle permet de bouger la case (posX , posY) dans la direction 'direction'.
-   * Elle ne retourne pas d'objet , elle se contente de modifier la grille 
-   * @param posX represente le numero de ligne de la case 
-   * @param posY represente le numero de colonne de la case 
+   * Elle ne retourne pas d'objet , elle se contente de modifier la grille
+   * @param posX represente le numero de ligne de la case
+   * @param posY represente le numero de colonne de la case
    * @param direction represente la direction dans la quelle on souhaite bouger notre la case
    */
   public void play (int posX , int posY , Direction direction){
@@ -232,6 +300,9 @@ public class Grille extends AbstractModeleEcoutable implements Serializable
     }
   }
 
+  /**
+   * Méthode pour visualiser le puzzle dans le terminal
+  */
   public void show(){
     String result = "";
     for(int i = 0; i < this.nbRow; i++){

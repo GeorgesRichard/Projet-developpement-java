@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes","u":"allclasses-index.html"},{"p":"fenetre","l":"Boutton_grille"},{"p":"fenetre","l":"Button_play"},{"p":"fenetre","l":"MyWindow"},{"p":"fenetre","l":"Panel_controle"},{"p":"fenetre","l":"Panel_jeu"}];updateSearchResults();

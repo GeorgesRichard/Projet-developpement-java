@@ -33,7 +33,7 @@ public class MyWindow  extends JFrame  {
         JPanel content= (JPanel) this.getContentPane();  
         Grille game = new Grille ( ligne , colonne) ; 
         game.creation();
-        game.playAlea(100); 
+        game.playAlea(20); 
         
         Panel_jeu Game_vue =  new Panel_jeu(game)  ;
         game.ajoutEcouteur(Game_vue);

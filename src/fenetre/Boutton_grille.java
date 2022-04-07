@@ -57,6 +57,7 @@ public class Boutton_grille extends JButton {
 						
 						}
 					panel.grille.fireChangement();
+					panel.end_dialogue() ; // teste si le jeu est terminé .
 					
 					}
 				
@@ -67,7 +68,6 @@ public class Boutton_grille extends JButton {
     
     }  
     public void cliqued(){
-		
 		if(this.numero!=0)
 		{
 			if(panel.cliqued){
@@ -86,7 +86,7 @@ public class Boutton_grille extends JButton {
 		
 		}  
 		
-		 } 
+	} 
 
 
 

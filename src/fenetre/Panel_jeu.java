@@ -61,10 +61,12 @@ public class Panel_jeu extends JPanel implements EcouteurModele {
     /**
      * Message de fermeture de jeu
      */
-    private void end_dialogue(){
+    public void end_dialogue(){
         if ( this.grille.isOver()){
             JOptionPane.showMessageDialog(Panel_jeu.this, "Felicitation , vous avez terminé le jeu ",
                  "FINI", JOptionPane.INFORMATION_MESSAGE);
+            this.grille.creation() ; 
+            this.grille.playAlea(100) ; 
         }
 
     }

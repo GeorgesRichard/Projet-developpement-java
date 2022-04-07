@@ -242,8 +242,6 @@ public class Grille extends AbstractModeleEcoutable
       nb = random.nextInt(a.size());
       historique.add(a.get(nb));
       move(a.get(nb));
-      //grille.show();
-      System.out.println("Le mouvement réalisé : " + a.get(nb));
       alea--;
     }
   }

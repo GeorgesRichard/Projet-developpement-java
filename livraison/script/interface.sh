@@ -1,3 +1,4 @@
+cd ..
 
 find ./src -name "*.java" > sources.txt
 
